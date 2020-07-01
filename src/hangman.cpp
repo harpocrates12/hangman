@@ -96,6 +96,7 @@ int main() {
     }
 
     std::cout << "Finished.\n";
+    std::cout << "Word: " << word << std::endl;
 
     if (!hangman.Finished()) {
         std::cout << "Congrats! You guessed the word\n";
