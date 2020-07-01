@@ -1,4 +1,8 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <random>
+#include <algorithm>
 
 #include "hangman.h"
 #include "result.h"
@@ -9,6 +13,27 @@ void Hangman::Print() const {
     }
 
     std::cout << std::endl;
+}
+
+std::string GetRandomWord() {
+    std::vector<std::string> words;
+
+    std::ifstream file_stream("../words.txt");
+    std::string line;
+
+    while(std::getline(file_stream, line)) {
+        std::istringstream line_stream(line);
+        std::string token;
+
+        while (line_stream >> token) {
+            words.emplace_back(token);
+        }
+    }
+
+    std::vector<std::string> out;
+    std::sample(words.begin(), words.end(), std::back_inserter(out), 1, std::mt19937{std::random_device{}()});
+
+    return out.front();
 }
 
 void Input(char &user_character) {
@@ -56,7 +81,9 @@ void Render(const Result &result, const Hangman &hangman) {
 }
 
 int main() {
-    Result result("hangman");
+    std::string word = GetRandomWord();
+
+    Result result(word);
     Hangman hangman;
     char user_character;
 
